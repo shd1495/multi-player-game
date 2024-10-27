@@ -1,6 +1,5 @@
 import { config } from '../config/config.js';
 import { PACKET_TYPE } from '../constants/header.js';
-import CustomError from '../utils/error/customError.js';
 import { packetParser } from '../utils/parser/packetParser.js';
 
 export const onData = (socket) => async (data) => {
