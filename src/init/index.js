@@ -1,4 +1,4 @@
-import { loadProtos } from './loadProto.js';
+import { loadProtos } from './loadProtos.js';
 
 const initServer = async () => {
   await loadProtos();
