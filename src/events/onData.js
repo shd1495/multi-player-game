@@ -1,5 +1,6 @@
 import { config } from '../config/config.js';
 import { PACKET_TYPE } from '../constants/header.js';
+import { getHandlerById } from '../handlers/index.js';
 import { packetParser } from '../utils/parser/packetParser.js';
 
 export const onData = (socket) => async (data) => {
@@ -22,8 +23,10 @@ export const onData = (socket) => async (data) => {
           case PACKET_TYPE.PING:
             break;
           case PACKET_TYPE.NORMAL:
-            const result = packetParser(packet);
-            console.log(result);
+            const { handlerId, userId, payload } = packetParser(packet);
+            const handler = getHandlerById(handlerId);
+
+            handler({ socket, userId, payload });
         }
       } catch (error) {
         console.error(error);
