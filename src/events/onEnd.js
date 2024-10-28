@@ -1,1 +1,1 @@
-export const onEnd = (socket) => {};
+export const onEnd = (socket) => (data) => {};

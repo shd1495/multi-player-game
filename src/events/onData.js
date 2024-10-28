@@ -10,7 +10,7 @@ export const onData = (socket) => async (data) => {
   //buffer에 담긴 데이터의 길이가 헤더보다 길면 파싱 시작
   while (socket.buffer.length > totalHeaderLength) {
     const length = socket.buffer.readUInt32BE(0);
-    const packetType = socket.buffer.readUInt8BE(config.packet.totalLength);
+    const packetType = socket.buffer.readUInt8(config.packet.totalLength);
 
     if (socket.buffer.length >= length) {
       const packet = socket.buffer.subarray(totalHeaderLength, length);
