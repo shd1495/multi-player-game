@@ -1,3 +1,5 @@
+import { createLocationPacket } from '../../utils/notification/game.notification.js';
+
 class Game {
   constructor(id) {
     this.id = id;
@@ -17,7 +19,14 @@ class Game {
     if (idx != -1) return this.users.splice(idx, 1)[0];
   }
 
-  getAllLocation() {}
+  getAllLocation(userId) {
+    const locationData = this.users
+      .filter((user) => user.id !== userId)
+      .map((user) => {
+        return { id: user.id, playerId: user.playerId, x: user.x, y: user.y };
+      });
+    return createLocationPacket(locationData);
+  }
 }
 
 export default Game;
