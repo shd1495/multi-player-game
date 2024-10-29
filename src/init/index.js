@@ -1,6 +1,6 @@
 import pools from '../db/database.js';
 import { addGameSession } from '../sessions/game.session.js';
-import testDbConnection from '../utils/testConnection.js';
+import testDbConnection from '../utils/db/testConnection.js';
 import { loadProtos } from './loadProtos.js';
 import { v4 as uuidv4 } from 'uuid';
 
