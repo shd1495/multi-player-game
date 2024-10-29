@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { config } from '../config/config.js';
-import { formatDate } from '../utils/dateFormatter.js';
+import { formatDate } from '../utils/formatters/dateFormatter.js';
 
 const { databases } = config;
 
