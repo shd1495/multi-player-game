@@ -8,9 +8,8 @@ const initServer = async () => {
   try {
     await loadProtos();
     const gameId = uuidv4();
-    const gameSession = addGameSession(gameId);
+    addGameSession(gameId);
     await testDbConnection(pools.USER_DB, 'USER_DB');
-    console.log(gameSession);
   } catch (error) {
     console.error(error);
     process.exit(1);
