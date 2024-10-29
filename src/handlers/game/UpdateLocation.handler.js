@@ -1,5 +1,6 @@
 import { getGameSession } from '../../sessions/game.session.js';
 import CustomError from '../../utils/error/customError.js';
+import { ErrorCodes } from '../../utils/error/errorCodes.js';
 import { handleError } from '../../utils/error/errorHandler.js';
 
 export const UpdateLocationHandler = ({ socket, userId, payload }) => {
@@ -10,7 +11,6 @@ export const UpdateLocationHandler = ({ socket, userId, payload }) => {
     if (!gameSession) {
       throw new CustomError(ErrorCodes.GAME_NOT_FOUND, '게임 세션을 찾을 수 없습니다.');
     }
-    console.log(gameSession);
 
     const user = gameSession.getUser(userId);
     if (!user) {
@@ -22,7 +22,8 @@ export const UpdateLocationHandler = ({ socket, userId, payload }) => {
 
     socket.write(packet);
   } catch (error) {
-    handleError(socket, error);
+    console.error(error);
+    handleError(socket, new CustomError(501, `위치 동기화 오류: ${error.message}`));
   }
 };
 
