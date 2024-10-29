@@ -19,6 +19,14 @@ class Game {
     if (idx != -1) return this.users.splice(idx, 1)[0];
   }
 
+  getMaxLatency() {
+    let maxLatency = 0;
+    this.users.forEach((user) => {
+      maxLatency = Math.max(maxLatency, user.latency);
+    });
+    return maxLatency;
+  }
+
   getAllLocation(userId) {
     const locationData = this.users
       .filter((user) => user.id !== userId)
