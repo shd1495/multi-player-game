@@ -14,10 +14,10 @@ export const createUser = async (deviceId) => {
   return { id, deviceId };
 };
 
-export const updateUserLogin = async (id) => {
-  await pools.USER_DB.query(SQL_QUERIES.UPDATE_USER_LOGIN, [id]);
+export const updateUserLogin = async (deviceId) => {
+  await pools.USER_DB.query(SQL_QUERIES.UPDATE_USER_LOGIN, [deviceId]);
 };
 
-export const updateUserPosition = async (id, x, y) => {
-  await pools.USER_DB.query(SQL_QUERIES.UPDATE_USER_POSITION, [x, y, id]);
+export const updateUserPosition = async (deviceId, x, y) => {
+  await pools.USER_DB.query(SQL_QUERIES.UPDATE_USER_POSITION, [x, y, deviceId]);
 };
