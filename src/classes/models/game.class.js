@@ -1,13 +1,25 @@
 import { createLocationPacket } from '../../utils/notification/game.notification.js';
+import IntervalManager from '../managers/interval.manager.js';
 
 class Game {
   constructor(id) {
     this.id = id;
     this.users = [];
+    this.intervalManager = new IntervalManager();
   }
 
   addUser(user) {
     this.users.push(user);
+
+    this.intervalManager.addPlayer(
+      user.id,
+      () => {
+        if (user.isSocketConnected()) {
+          user.ping();
+        }
+      },
+      1000,
+    );
   }
 
   getUser(userId) {
@@ -16,7 +28,11 @@ class Game {
 
   removeUser(socket) {
     const idx = this.users.findIndex((user) => user.socket === socket);
-    if (idx != -1) return this.users.splice(idx, 1)[0];
+    if (idx != -1) {
+      const user = this.users.splice(idx, 1)[0];
+      this.intervalManager.removePlayer(user.id);
+      return user;
+    }
   }
 
   getMaxLatency() {
@@ -28,10 +44,13 @@ class Game {
   }
 
   getAllLocation(userId) {
+    const maxLatency = this.getMaxLatency();
+
     const locationData = this.users
       .filter((user) => user.id !== userId)
       .map((user) => {
-        return { id: user.id, playerId: user.playerId, x: user.x, y: user.y };
+        const { x, y } = user.calculatePosition(maxLatency);
+        return { id: user.id, playerId: user.playerId, x: x, y: y };
       });
     return createLocationPacket(locationData);
   }
