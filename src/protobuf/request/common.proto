@@ -8,3 +8,7 @@ message Packet {
   string version  = 3; 
   bytes payload = 4;        
 }
+
+message Ping {
+  uint64 timestamp = 1;
+}
