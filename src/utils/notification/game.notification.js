@@ -17,10 +17,20 @@ const serializer = (message, type) => {
 
 export const createLocationPacket = (users) => {
   const protoMessages = getProtoMessages();
-  const Location = protoMessages.gameNotification.UpdateLocation;
+  const location = protoMessages.gameNotification.UpdateLocation;
 
   const payload = { users };
-  const message = Location.create(payload);
-  const locationPacket = Location.encode(message).finish();
+  const message = location.create(payload);
+  const locationPacket = location.encode(message).finish();
   return serializer(locationPacket, PACKET_TYPE.LOCATION);
+};
+
+export const createPingPacket = (timestamp) => {
+  const protoMessages = getProtoMessages();
+  const ping = protoMessages.common.Ping;
+
+  const payload = { timestamp };
+  const message = ping.create(payload);
+  const pingPacket = ping.encode(message).finish();
+  return serializer(pingPacket, PACKET_TYPE.PING);
 };
