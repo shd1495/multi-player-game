@@ -20,6 +20,7 @@ class Game {
       },
       1000,
     );
+    console.log(`접속 중인 클라이언트 수: ${this.users.length}`);
   }
 
   getUser(userId) {
@@ -29,8 +30,11 @@ class Game {
   removeUser(socket) {
     const idx = this.users.findIndex((user) => user.socket === socket);
     if (idx != -1) {
+      if (this.users.length === 0) this.intervalManager.clearAll();
       const user = this.users.splice(idx, 1)[0];
       this.intervalManager.removePlayer(user.id);
+
+      console.log(`접속 중인 클라이언트 수: ${this.users.length}`);
       return user;
     }
   }
