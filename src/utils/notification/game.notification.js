@@ -1,6 +1,7 @@
 import { config } from '../../config/config.js';
 import { PACKET_TYPE } from '../../constants/header.js';
 import { getProtoMessages } from '../../init/loadProtos.js';
+import Long from 'long';
 
 const serializer = (message, type) => {
   const packetLength = Buffer.alloc(config.packet.totalLength);
@@ -29,7 +30,9 @@ export const createPingPacket = (timestamp) => {
   const protoMessages = getProtoMessages();
   const ping = protoMessages.common.Ping;
 
-  const payload = { timestamp };
+  const timestampLong = Long.fromNumber(timestamp);
+
+  const payload = { timestamp: timestampLong };
   const message = ping.create(payload);
   const pingPacket = ping.encode(message).finish();
   return serializer(pingPacket, PACKET_TYPE.PING);
