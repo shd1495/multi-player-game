@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Long from 'long';
 import { config } from '../../config/config.js';
 
-const HOST = '127.0.0.1';
+const HOST = '3.38.169.215';
 const PORT = 5555;
 const CLIENT_VERSION = '1.0.0';
 
@@ -152,10 +152,19 @@ const createDummyClient = (deviceId) => {
 
     // * onData
     socket.on('data', (data) => {
+      if (data.length < config.packet.totalLength + config.packet.typeLength) {
+        console.log('헤더 길이 체크 실패');
+        return;
+      }
       const length = data.readUInt32BE(0);
-      const totalHeaderLength = TOTAL_LENGTH + PACKET_TYPE_LENGTH;
+      const totalHeaderLength = config.packet.totalLength + config.packet.typeLength;
       const packetType = data.readUInt8(4);
-      const packet = data.subarray(totalHeaderLength, totalHeaderLength + length);
+
+      // 전체 패킷 길이 체크
+      if (data.length < length) {
+        return;
+      }
+      const packet = data.subarray(totalHeaderLength, length);
 
       if (packetType === PACKET_TYPE.NORMAL) {
         const Response = protoMessages.response.Response;
@@ -173,6 +182,12 @@ const createDummyClient = (deviceId) => {
       } else if (packetType === PACKET_TYPE.PING) {
         try {
           const Ping = protoMessages.common.Ping;
+
+          // ping 패킷 길이 검증
+          if (packet.length < 7) {
+            console.log('핑 패킷 체크 실패');
+            return;
+          }
           const actualPingData = packet.subarray(0, 7);
           const pingMessage = Ping.decode(actualPingData);
 
@@ -210,7 +225,7 @@ const createDummyClient = (deviceId) => {
 
 async function initializeClients() {
   await loadProtos();
-  const LIMIT = 100;
+  const LIMIT = 200;
   const DELAY_MS = 50; // 0.05초
   const dummies = [];
 
