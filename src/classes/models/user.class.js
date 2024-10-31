@@ -45,16 +45,13 @@ class User {
   }
 
   ping() {
-    console.log(this.isSocketConnected());
     if (this.isSocketConnected()) {
-      const now = Date.now();
-      console.log(`${this.id} ping`);
-      this.socket.write(createPingPacket(now), (err) => {
-        if (err) {
-          console.error(`Error sending ping to ${this.id}:`, err);
-          this.cleanup(); // 사용자 청소
-        }
-      });
+      try {
+        const now = Date.now();
+        this.socket.write(createPingPacket(now));
+      } catch (error) {
+        console.log(`${this.id} cannot ping`);
+      }
     } else {
       console.log(`${this.id} cannot ping, socket is destroyed`);
     }
@@ -63,7 +60,6 @@ class User {
   handlePong(data) {
     const now = Date.now();
     this.latency = (now - data.timestamp) / 2;
-    console.log(`pong ${this.id} at ${now} latency ${this.latency}`);
   }
 }
 
