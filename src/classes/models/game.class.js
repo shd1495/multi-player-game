@@ -18,7 +18,7 @@ class Game {
           user.ping();
         }
       },
-      1000,
+      3000,
     );
     console.log(`접속 중인 클라이언트 수: ${this.users.length}`);
   }

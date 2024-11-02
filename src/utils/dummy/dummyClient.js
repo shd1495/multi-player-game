@@ -161,6 +161,7 @@ const createDummyClient = (deviceId) => {
       const packetType = data.readUInt8(4);
 
       // 전체 패킷 길이 체크
+      console.log(data.length, length);
       if (data.length < length) {
         return;
       }
@@ -226,7 +227,7 @@ const createDummyClient = (deviceId) => {
 async function initializeClients() {
   await loadProtos();
   const LIMIT = 200;
-  const DELAY_MS = 50; // 0.05초
+  const DELAY_MS = 25; // 0.05초
   const dummies = [];
 
   for (let i = 0; i < LIMIT; i++) {
